@@ -84,6 +84,16 @@ public class ImportPassageService {
       while (keys.next()) {
         passageId = keys.getLong(1);
       }
+      PreparedStatement psO = connexion.prepareStatement(sqlObservation);
+      for (ObservationAImporter observation : observations) {
+        psO.setLong(1, passageId);
+        psO.setDouble(2, observation.tempsDebut());
+        psO.setDouble(3, observation.tempsFin());
+        psO.setInt(4, observation.frequenceMediane());
+        psO.setString(5, observation.codeTaxon());
+        psO.setDouble(6, observation.probabilite());
+        psO.executeUpdate();
+      }
       connexion.commit();
     } catch (SQLException e) {
       if (connexion != null)
